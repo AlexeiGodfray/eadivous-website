@@ -1,0 +1,931 @@
+@import "tailwindcss";
+@import "./styles/theme_config.css";
+
+/* Maps theme_config → Tailwind utility classes used in components */
+@theme {
+  --color-text-display: var(--color-text-heading-display);
+
+  --spacing-grid-margin: var(--layout-grid-margin);
+  --spacing-logo: var(--size-logo);
+
+  --text-display: var(--font-size-heading-display);
+  --text-body: var(--font-size-body);
+
+  --leading-display: var(--font-line-height-heading-display);
+  --leading-body: var(--font-line-height-body);
+}
+
+*,
+*::before,
+*::after {
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body);
+  line-height: var(--font-line-height-body);
+  color: var(--color-text-body);
+  background: var(--color-background-page);
+}
+
+body {
+  margin: 0;
+  background: var(--color-background-page);
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100svh;
+}
+
+/* =============================================================================
+   HERO — full-viewport OBYS-style composition
+   topbar (logo + clock) · index list (left) · headline (right) · drone (br)
+   ============================================================================= */
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--layout-page-max-width);
+  min-height: 100svh;
+  margin-inline: auto;
+  padding: var(--layout-grid-margin);
+}
+
+.hero-topbar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-16);
+}
+
+.hero-topbar-end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+  flex-shrink: 0;
+}
+
+.section-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.section-progress-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.section-progress-sep {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-meta);
+  user-select: none;
+}
+
+.section-progress-link {
+  font-size: var(--font-size-meta);
+  line-height: var(--font-line-height-meta);
+  letter-spacing: var(--font-letter-spacing-meta);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.section-progress-link:hover,
+.section-progress-link:focus-visible {
+  color: var(--color-text-body);
+}
+
+.section-progress-link.is-active {
+  color: var(--color-text-body);
+}
+
+.section-progress-link:focus-visible {
+  outline: 1px solid var(--color-accent-default);
+  outline-offset: 2px;
+}
+
+#section-hero,
+#section-about,
+#section-connectivity {
+  scroll-margin-top: var(--space-48);
+}
+
+.hero-logo {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--color-text-heading-display);
+}
+
+.hero-logo-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-logo-topbar);
+  height: var(--size-logo-topbar);
+}
+
+.hero-logo-stack {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--size-logo-topbar);
+  width: auto;
+  max-width: 100%;
+}
+
+.hero-logo-img {
+  display: block;
+  height: var(--size-logo-topbar);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.hero-logo-img--still {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero-logo-stack.is-frozen .hero-logo-img--anim {
+  visibility: hidden;
+}
+
+.hero-logo-stack.is-frozen .hero-logo-img--still {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hero-clock {
+  font-size: var(--font-size-meta);
+  line-height: var(--font-line-height-meta);
+  letter-spacing: var(--font-letter-spacing-meta);
+  text-transform: uppercase;
+  color: var(--color-text-body);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ----- body — holds the ledger grid + the drone panel ----- */
+.hero-body {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  padding-top: var(--space-48);
+  min-height: 0;
+}
+
+/* Shared horizontal grid: each big headline line and its index entry share one
+   full-width row, with a hairline rule running beneath the word. */
+.hero-ledger {
+  display: grid;
+  grid-template-columns: repeat(var(--layout-grid-column-count), 1fr);
+  column-gap: var(--layout-grid-gutter);
+  align-items: end;
+}
+
+/* h1 dissolves into the grid so each title line becomes a ledger row */
+.hero-headline {
+  display: contents;
+  margin: 0;
+}
+
+/* one full-width rule per row, sitting beneath the big word */
+.ledger-rule {
+  grid-column: 1 / -1;
+  align-self: stretch;
+  border-bottom: 1px solid var(--color-border-default);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ----- headline lines — alignment varies per segment (OBYS-style) ----- */
+.display-title-line {
+  --shift: 0.12;
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: var(--font-size-heading-display);
+  line-height: var(--font-line-height-heading-display);
+  letter-spacing: -0.018em;
+  color: var(--color-text-heading-display);
+  white-space: nowrap;
+  overflow-x: visible;
+  overflow-y: clip;
+  padding-bottom: 0.14em;
+  /* scroll-linked horizontal drift; --scroll (px) is set on <html> in JS,
+     each row drifts a different direction/speed via --shift */
+  transform: translate3d(
+    calc(var(--scroll, 0) * var(--shift) * 1px + var(--pointer-x, 0) * var(--pointer-shift, 0) * 1px),
+    0,
+    0
+  );
+  will-change: transform;
+}
+
+.display-title-line:nth-child(1) {
+  --shift: -0.08;
+  --pointer-shift: 5;
+}
+.display-title-line:nth-child(2) {
+  --shift: 0.13;
+  --pointer-shift: -4;
+}
+.display-title-line:nth-child(3) {
+  --shift: -0.18;
+  --pointer-shift: 7;
+}
+.display-title-line:nth-child(4) {
+  --shift: 0.1;
+  --pointer-shift: -6;
+}
+.display-title-line:nth-child(5) {
+  --shift: -0.14;
+  --pointer-shift: 4;
+}
+.display-title-line:nth-child(6) {
+  --shift: 0.2;
+  --pointer-shift: -5;
+}
+
+/* company name → centered; tagline part A → flush right; part B → flush left */
+.display-title-line--center {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.display-title-line--right {
+  grid-column: 1 / -1;
+  text-align: right;
+}
+
+.display-title-line--left {
+  grid-column: 5 / -1;
+  text-align: left;
+}
+
+.display-title-line-inner {
+  display: block;
+  animation: heading-line-enter var(--animation-duration-heading-line-enter) var(--animation-easing-enter)
+    both;
+}
+
+/* ----- index list — compact, top-left; ~2 entries per big-line band ----- */
+.index-list {
+  position: relative;
+  z-index: 2;
+  grid-column: 1 / 4;
+  grid-row: 1 / 5;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.index-link {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  column-gap: var(--space-12);
+  align-items: baseline;
+  font-size: var(--font-size-meta);
+  line-height: 1.3;
+  letter-spacing: var(--font-letter-spacing-meta);
+  text-transform: uppercase;
+  color: var(--color-text-body);
+  text-decoration: none;
+  padding-block: 0.125rem;
+  overflow: hidden;
+  isolation: isolate;
+  will-change: transform;
+}
+
+.index-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--color-accent-default);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.4s var(--animation-easing-enter);
+}
+
+.index-link:hover::before,
+.index-link:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.index-num,
+.index-label {
+  position: relative;
+  z-index: 1;
+  transition: color 0.4s var(--animation-easing-enter);
+}
+
+.index-num {
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.index-label {
+  overflow: hidden;
+}
+
+.index-label-inner {
+  display: block;
+  animation: heading-line-enter var(--animation-duration-socials-link-enter) var(--animation-easing-enter)
+    both;
+}
+
+.index-link:hover .index-num,
+.index-link:hover .index-label,
+.index-link:focus-visible .index-num,
+.index-link:focus-visible .index-label {
+  color: var(--color-background-page);
+}
+
+.index-link:focus-visible {
+  outline: 1px solid var(--color-accent-default);
+  outline-offset: -1px;
+}
+
+/* ----- drone visual — shares column with globe scrolly ----- */
+.hero-drone {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  overflow: visible;
+}
+
+.about-scrolly {
+  margin-top: var(--space-64);
+}
+
+/* =============================================================================
+   SCROLLY — copy (left) + pinned 3D visual (right)
+   ============================================================================= */
+
+.globe-scrolly {
+  position: relative;
+  width: 100%;
+  margin-top: var(--space-64);
+  padding-bottom: var(--space-64);
+}
+
+/* Match hero-bottom: copy column + flexible visual column */
+.globe-scrolly-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-48);
+}
+
+.globe-scrolly-copy {
+  position: relative;
+  z-index: 2;
+  flex: 0 1 var(--layout-scrolly-copy-width);
+  min-width: 0;
+  padding: var(--space-32);
+}
+
+.globe-scrolly-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  min-height: var(--layout-scrolly-step-min);
+  padding-block: var(--space-48);
+  justify-content: center;
+  opacity: 0.22;
+  transform: translateY(0.75rem);
+  transition:
+    opacity 0.45s var(--animation-easing-enter),
+    transform 0.45s var(--animation-easing-enter);
+}
+
+.globe-scrolly-step:first-child {
+  padding-top: 0;
+}
+
+.globe-scrolly-step:last-child {
+  padding-bottom: 0;
+}
+
+.globe-scrolly-step.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.globe-scrolly-step-num {
+  font-size: var(--font-size-meta);
+  line-height: var(--font-line-height-meta);
+  letter-spacing: var(--font-letter-spacing-meta);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+.globe-scrolly-visual {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-self: stretch;
+  overflow: visible;
+}
+
+#section-connectivity .globe-scrolly-pin {
+  height: var(--layout-connectivity-visual-height);
+}
+
+.globe-scrolly-pin {
+  position: sticky;
+  top: var(--space-48);
+  height: var(--layout-visual-height);
+}
+
+.globe-scrolly-progress {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  margin: 0;
+  font-size: var(--font-size-meta);
+  line-height: var(--font-line-height-meta);
+  letter-spacing: var(--font-letter-spacing-meta);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.globe-scrolly-progress-current {
+  color: var(--color-text-body);
+}
+
+.globe-scrolly-progress-sep {
+  margin-inline: var(--space-4);
+  color: var(--color-border-default);
+}
+
+.globe-scrolly-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.globe-scrolly-stage .topology-scene {
+  position: absolute;
+  inset: 0;
+}
+
+.globe-scrolly-stage .hero-drone {
+  position: absolute;
+  inset: 0;
+}
+
+.globe-label {
+  font-size: var(--font-size-meta);
+  letter-spacing: var(--font-letter-spacing-meta);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.globe-heading {
+  margin: 0;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(1.5rem, 2.8vw, 2.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--color-text-heading-display);
+}
+
+.globe-body {
+  margin: 0;
+  font-size: var(--font-size-body);
+  line-height: var(--font-line-height-body);
+  color: var(--color-text-body);
+  max-width: 34rem;
+}
+
+.globe-hub-label {
+  display: inline-block;
+  padding: 0.3rem 0.55rem;
+  font-family: inherit;
+  font-size: 0.625rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-body);
+  background: var(--color-background-page);
+  border: 1px solid var(--color-border-default);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  transform: translateY(-0.35rem);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.globe-hub-label.is-visible {
+  opacity: 1;
+}
+
+.globe-hub-label--overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: opacity 0.15s ease;
+}
+
+.globe-hub-label--remote {
+  color: var(--color-text-muted);
+  border-style: dashed;
+}
+
+.topology-scene [class*='html'] {
+  pointer-events: none !important;
+}
+
+/* =============================================================================
+   SCROLL REVEAL + MAGNETIC LINKS
+   ============================================================================= */
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(1.1rem);
+  transition:
+    opacity 0.65s var(--animation-easing-enter),
+    transform 0.65s var(--animation-easing-enter);
+}
+
+.scroll-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.magnetic-link {
+  will-change: transform;
+}
+
+.site-footer-link.magnetic-link {
+  display: inline-block;
+}
+
+/* =============================================================================
+   DRONE SCENE (three.js canvas)
+   ============================================================================= */
+
+.topology-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
+
+.topology-scene.topology-scene--ready {
+  visibility: visible;
+}
+
+.topology-scene-canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: none;
+  opacity: 0;
+  background: transparent;
+  transition: opacity 0.35s ease-out;
+}
+
+.topology-scene.topology-scene--ready .topology-scene-canvas {
+  opacity: 1;
+}
+
+/* Soft edge fade on connectivity globe — normal canvas bounds, no bleed */
+#section-connectivity .topology-scene {
+  -webkit-mask-image: radial-gradient(
+    ellipse 90% 86% at 50% 50%,
+    #000 72%,
+    rgb(0 0 0 / 0.88) 88%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 90% 86% at 50% 50%,
+    #000 72%,
+    rgb(0 0 0 / 0.88) 88%,
+    transparent 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topology-scene-canvas {
+    transition: none;
+  }
+}
+
+/* =============================================================================
+   ENTRANCE ANIMATIONS
+   ============================================================================= */
+
+@keyframes logo-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -0.625rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes heading-line-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-logo-enter {
+  animation: logo-enter var(--animation-duration-logo-enter) var(--animation-easing-enter) both;
+}
+
+/* =============================================================================
+   CUSTOM CURSOR — inverting ball
+   ============================================================================= */
+
+@media (pointer: fine) {
+  body.has-custom-cursor,
+  body.has-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+.cursor-ball-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+.cursor-ball {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--size-cursor-ball);
+  height: var(--size-cursor-ball);
+  border-radius: 50%;
+  background: #ffffff;
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: opacity 0.2s var(--animation-easing-enter);
+}
+
+.cursor-ball--visible {
+  opacity: 1;
+}
+
+/* =============================================================================
+   RESPONSIVE — stack on tablet / mobile
+   ============================================================================= */
+
+@media (max-width: 63.9375rem) {
+  .hero-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-32);
+    padding-top: var(--space-32);
+  }
+
+  /* Unwind the ledger grid: headline block, then list, then drone */
+  .hero-ledger {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ledger-rule {
+    display: none;
+  }
+
+  .hero-headline {
+    display: block;
+  }
+
+  .display-title-line,
+  .display-title-line--center,
+  .display-title-line--right,
+  .display-title-line--left {
+    grid-column: auto;
+    align-self: auto;
+    text-align: left;
+    white-space: normal;
+    padding-bottom: 0;
+  }
+
+  .index-list {
+    margin-top: var(--space-32);
+  }
+
+  .index-link {
+    padding-block: var(--space-12);
+    border-bottom: 1px solid var(--color-border-default);
+  }
+
+  .index-link:first-child {
+    border-top: 1px solid var(--color-border-default);
+  }
+
+  .about-scrolly,
+  .globe-scrolly {
+    margin-top: var(--space-48);
+    padding-bottom: var(--space-48);
+  }
+
+  .globe-scrolly-layout {
+    flex-direction: column;
+    gap: var(--space-24);
+  }
+
+  .globe-scrolly-copy {
+    flex: none;
+    padding: 0;
+  }
+
+  .globe-scrolly-visual {
+    order: -1;
+  }
+
+  #section-connectivity .globe-scrolly-pin {
+    height: clamp(24rem, 62vh, 34rem);
+  }
+
+  .globe-scrolly-pin {
+    position: relative;
+    top: auto;
+    height: clamp(16rem, 42vh, 22rem);
+  }
+
+  .globe-scrolly-step {
+    min-height: auto;
+    padding-block: var(--space-32);
+    justify-content: flex-start;
+  }
+
+  .globe-scrolly-step:first-child {
+    padding-top: 0;
+  }
+}
+
+/* =============================================================================
+   FOOTER — logo, tagline, links
+   ============================================================================= */
+
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-24) var(--space-32);
+  margin-top: var(--space-64);
+  padding-top: var(--space-32);
+  border-top: 1px solid var(--color-border-default);
+}
+
+.site-footer-logo {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--color-text-heading-display);
+}
+
+.site-footer-logo .hero-logo-stack,
+.site-footer-logo .hero-logo-img {
+  height: 1.75rem;
+  width: auto;
+}
+
+.site-footer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  flex: 1;
+  min-width: 12rem;
+}
+
+.site-footer-made,
+.site-footer-copy {
+  margin: 0;
+  font-size: var(--font-size-meta);
+  line-height: var(--font-line-height-meta);
+  letter-spacing: var(--font-letter-spacing-meta);
+  color: var(--color-text-body);
+}
+
+.site-footer-copy {
+  color: var(--color-text-muted);
+}
+
+.site-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-16) var(--space-24);
+}
+
+.site-footer-link {
+  font-size: var(--font-size-meta);
+  line-height: var(--font-line-height-meta);
+  letter-spacing: var(--font-letter-spacing-meta);
+  text-transform: uppercase;
+  color: var(--color-text-body);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.site-footer-link:hover {
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 48rem) {
+  .site-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-24);
+  }
+
+  .site-footer-meta {
+    order: 2;
+  }
+
+  .site-footer-nav {
+    order: 3;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-logo-enter,
+  .display-title-line-inner,
+  .index-label-inner {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .display-title-line {
+    transform: none;
+  }
+
+  .index-link::before,
+  .index-num,
+  .index-label {
+    transition: none;
+  }
+
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .globe-scrolly-step {
+    opacity: 1;
+    transform: none;
+    min-height: auto;
+    padding-block: var(--space-32);
+    transition: none;
+  }
+
+  .globe-scrolly-pin {
+    position: relative;
+    top: auto;
+    height: clamp(16rem, 40vh, 22rem);
+  }
+}

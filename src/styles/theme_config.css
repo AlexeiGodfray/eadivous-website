@@ -1,0 +1,110 @@
+/**
+ * Site theme config — global UI constants (one file, like a config dict).
+ *
+ * Naming pattern:  --{group}-{what}-{detail}
+ *
+ *   group   = color | spacing | layout | font
+ *   what    = the thing being set (background, grid, size, …)
+ *   detail  = role or literal value (page, 64, display, …)
+ *
+ * Examples:
+ *   --color-background-page     page background color
+ *   --space-64                  4rem (design step 64 on 8px grid)
+ *   --layout-grid-column-count  number of grid columns (12)
+ */
+
+/* =============================================================================
+   COLORS — palette
+   ============================================================================= */
+
+:root {
+  --color-background-page: #ffffff;
+  --color-text-body: #111111;
+  --color-text-muted: #8a8a86;
+  --color-topology-point: #e4e4e4;
+  --color-text-heading-display: #0a0a0a;
+  --color-border-default: #d9d9d4;
+  --color-accent-default: #0a0a0a;
+  --color-panel-bg: #0a0a0a;
+
+  /* =============================================================================
+     SPACING — 8px grid (step ÷ 16 = rem at 16px root)
+     ============================================================================= */
+
+  --space-8: 0.5rem;
+  --space-12: 0.75rem;
+  --space-16: 1rem;
+  --space-24: 1.5rem;
+  --space-32: 2rem;
+  --space-48: 3rem;
+  --space-64: 4rem;
+
+  /* =============================================================================
+     LAYOUT — Swiss 12-column grid
+     ============================================================================= */
+
+  --layout-grid-column-count: 12;
+  --layout-grid-margin: 1.75rem;
+  --layout-grid-gutter: 1rem;
+  --layout-page-max-width: 120rem;
+  --size-logo: 9.375rem;
+  --size-logo-topbar: 5.6rem;
+  --size-cursor-ball: 3rem;
+  --cursor-ball-lerp: 0.38;
+
+  /* Shared 3D visual column */
+  --layout-visual-height: clamp(20rem, 52svh, 30rem);
+  --layout-connectivity-visual-height: clamp(28rem, 68svh, 40rem);
+
+  /* Scrolly — equal step rhythm for drone + globe sections */
+  --layout-scrolly-copy-width: 30rem;
+  --layout-scrolly-step-min: 60svh;
+
+  /* =============================================================================
+     FONT — family, sizes, line heights
+     ============================================================================= */
+
+  --font-family-primary: 'Plus Jakarta Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-size-heading-display: clamp(2rem, 5.6vw, 5.25rem);
+  --font-line-height-heading-display: 1;
+  --font-size-body: 1rem;
+  --font-line-height-body: 1.5;
+  --font-size-meta: 0.75rem;
+  --font-line-height-meta: 1.4;
+  --font-letter-spacing-meta: 0.04em;
+
+  /* =============================================================================
+     ANIMATION — entrance timing (logo, display heading)
+     ============================================================================= */
+
+  --animation-duration-logo-enter: 0.55s;
+  --animation-duration-heading-line-enter: 0.65s;
+  --animation-easing-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --animation-delay-heading-line-first: 0.12s;
+  --animation-delay-heading-line-second: 0.28s;
+
+  /* Description — fade in after display heading settles */
+  --animation-delay-description-start: 0.95s;
+  --animation-duration-description-enter: 0.6s;
+
+  /* Social links — staggered with heading (runs in parallel with description) */
+  --animation-duration-socials-link-enter: 0.65s;
+  --animation-delay-socials-link-stagger: 0.16s;
+  --animation-delay-socials-link-first: 0.4s;
+  --animation-delay-socials-link-second: calc(
+    var(--animation-delay-socials-link-first) + var(--animation-delay-socials-link-stagger)
+  );
+  --animation-delay-socials-link-third: calc(
+    var(--animation-delay-socials-link-second) + var(--animation-delay-socials-link-stagger)
+  );
+  --animation-delay-socials-link-fourth: calc(
+    var(--animation-delay-socials-link-third) + var(--animation-delay-socials-link-stagger)
+  );
+}
+
+/* Mobile override — smaller page margins (matches Tailwind sm − 1px) */
+@media (max-width: 39.9375rem) {
+  :root {
+    --layout-grid-margin: 1rem;
+  }
+}
