@@ -5,7 +5,7 @@ import { SectionProgress } from './SectionProgress';
 export function SiteHeader() {
   return (
     <header className="hero-topbar">
-      <a href="/" className="hero-logo" aria-label="Eadivous Technologies home">
+      <a href={import.meta.env.BASE_URL} className="hero-logo" aria-label="Eadivous Technologies home">
         <span className="hero-logo-slot">
           <Logo className="hero-logo-slot-img" />
         </span>

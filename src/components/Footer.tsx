@@ -13,7 +13,7 @@ const YEAR = new Date().getFullYear();
 export function Footer() {
   return (
     <footer className="site-footer">
-      <a href="/" className="site-footer-logo" aria-label="Eadivous Technologies home">
+      <a href={import.meta.env.BASE_URL} className="site-footer-logo" aria-label="Eadivous Technologies home">
         <Logo />
       </a>
 
