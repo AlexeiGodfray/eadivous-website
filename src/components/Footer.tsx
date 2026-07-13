@@ -4,7 +4,7 @@ import { MagneticLink } from './MagneticLink';
 const FOOTER_LINKS = [
   { label: 'GitHub', href: 'https://github.com/EadivousTechnologies' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/company/eadivous/' },
-  { label: 'X', href: 'https://x.com/baruchintel' },
+  { label: 'X', href: 'https://x.com/eadivoustech' },
   { label: 'Contact', href: 'mailto:contact@eadivous.com' },
 ] as const;
 

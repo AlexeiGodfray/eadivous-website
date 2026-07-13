@@ -12,6 +12,7 @@ node_modules
 .playwright-mcp
 dist
 dist-ssr
+eadivous-dist.tar.gz
 *.local
 
 # Editor directories and files

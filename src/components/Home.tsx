@@ -13,7 +13,7 @@ const TITLE_LINES = [
 const LINKS = [
   { num: '01', label: 'GitHub', href: 'https://github.com/EadivousTechnologies' },
   { num: '02', label: 'LinkedIn', href: 'https://www.linkedin.com/company/eadivous/' },
-  { num: '03', label: 'X', href: 'https://x.com/baruchintel' },
+  { num: '03', label: 'X', href: 'https://x.com/eadivoustech' },
   { num: '04', label: 'Contact', href: 'mailto:contact@eadivous.com' },
 ] as const;
 
